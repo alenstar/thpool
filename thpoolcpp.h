@@ -5,20 +5,21 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-
+#include "singleton.h"
+#include <functional>
 class ThreadJob {
 	public:
 		virtual void run() = 0;
 };
 
-class ThreadPool {
+class ThreadPool : public Singleton<ThreadPool>{
 	private:	
 		threadpool thpool = {0x00};
 	public:
 		ThreadPool(int num = 4) {
 			thpool = thpool_init(num);
 		}
-		~ThreadPool(){
+		virtual ~ThreadPool(){
 			if(thpool) {
 				thpool_destroy(thpool);
 			}
@@ -42,4 +43,11 @@ class ThreadPool {
 						}, job);
 			}
 		}
+		
+private:
+	/*************************************************************************
+		Copy constructor and assignment usage is denied.
+	*************************************************************************/
+	ThreadPool(const ThreadPool&) : Singleton <ThreadPool>() {}
+	ThreadPool& operator=(const ThreadPool&) {return *this;}
 };

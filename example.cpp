@@ -37,18 +37,18 @@ class task3: public ThreadJob {
 int main(){
 	
 	puts("Making threadpool with 4 threads");
-	ThreadPool thpool(4);
+	new ThreadPool(4);
 
 	puts("Adding 40 tasks to threadpool");
 	int i;
 	for (i=0; i<20; i++){
-		thpool.add(task1, NULL);
-		thpool.add(task2, NULL);
-		thpool.add(new task3);
+		ThreadPool::getSingletonPtr()->add(task1, NULL);
+		ThreadPool::getSingletonPtr()->add(task2, NULL);
+		ThreadPool::getSingletonPtr()->add(new task3);
 	};
 
 	puts("Killing threadpool");
-	thpool.wait();
-	
+	ThreadPool::getSingletonPtr()->wait();
+	delete ThreadPool::getSingletonPtr();
 	return 0;
 }
